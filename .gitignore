@@ -1,0 +1,24 @@
+# Environment variables
+.env
+.env.*
+
+# Python generated files
+__pycache__/
+*.pyc
+*.pyo
+
+# Machine learning generated files
+*.pkl
+
+# Generated datasets
+*.csv
+
+# Mage
+mage.log
+
+# Virtual environments
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
