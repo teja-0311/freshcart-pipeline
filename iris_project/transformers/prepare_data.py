@@ -15,7 +15,7 @@ def transform(df, *args, **kwargs):
 
     train_indices, test_indices = train_test_split(
         df.index,
-        test_size=0.3,
+        test_size=0.2,
         random_state=42,
         stratify=df["target"]
     )
