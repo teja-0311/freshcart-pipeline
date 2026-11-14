@@ -16,8 +16,8 @@
 | **Phase 1 (Part A)** | Git and CI/CD | 15 | **Completed** | Directory structure, .gitignore, 7-commit history with intentional CI failure and fix verified. 4/4 pytest tests passing. |
 | **Phase 2 (Part B)** | FreshCart ELT using Snowflake | 30 | **Completed** | Full `elt/freshcart_elt.ipynb` notebook implemented with baseline, currency rule, SCD2 Arjun event, custom DQ check, and tracing. `.env.example` created. |
 | **Phase 3 (Part C)** | Iris ML pipeline using Mage | 20 | **Completed** | Full Mage block DAG implemented, `metadata.yaml` configured, test-gate experiment executed (`max_depth = 1..5`), evaluation branch added, custom validation block created, and 9/9 pytest tests passing. |
-| **Phase 4 (Part D)** | Food-order streaming with RabbitMQ | 20 | **In Progress** | Implementing `stream/dispatcher.py` and `stream/driver.py`. |
-| **Phase 5 (Part E)** | Final Report, Architecture & Viva | 15 | **Not Started** | Target: `23BCS091_Golla_Teja_Pipelines.pdf`. |
+| **Phase 4 (Part D)** | Food-order streaming with RabbitMQ | 20 | **Completed** | `stream/dispatcher.py` and `stream/driver.py` implemented with topic exchange `rapido-dispatch`, dynamic binding patterns, and ACK/NACK error handling. All 6 paper routing scenarios verified via automated tests. |
+| **Phase 5 (Part E)** | Final Report, Architecture & Viva | 15 | **In Progress** | Generating final PDF report `23BCS091_Golla_Teja_Pipelines.pdf`, diagrams, and reflection. |
 | **Bonus** | RabbitMQ to Snowflake Lakehouse | +10 | **Deferred** | Scheduled after Parts A-E. |
 
 ---
@@ -47,10 +47,10 @@
 - [x] **C4. Custom Block:** Added `validate_data` with `@test` decorators, added test suite in `tests/test_iris_pipeline.py`.
 
 ### Part D: Food-Order Event Streaming with RabbitMQ (20 Marks)
-- [ ] **D1. Paper Routing Table:** Complete matching analysis for binding patterns vs routing keys.
-- [ ] **D2. Dispatcher Script:** Implement `stream/dispatcher.py` for `rapido-dispatch` topic exchange.
-- [ ] **D3. Driver Script:** Implement `stream/driver.py` with private queues, pattern bindings, and consumption.
-- [ ] **D4. ACK / NACK Handling:** Handle malformed messages (`zone` missing) with `basic_nack(requeue=False)` and valid messages with `basic_ack()`.
+- [x] **D1. Paper Routing Table:** Complete matching analysis for binding patterns vs routing keys.
+- [x] **D2. Dispatcher Script:** Implemented `stream/dispatcher.py` for `rapido-dispatch` topic exchange.
+- [x] **D3. Driver Script:** Implemented `stream/driver.py` with private queues, pattern bindings, and consumption.
+- [x] **D4. ACK / NACK Handling:** Handled malformed messages (`zone` missing) with `basic_nack(requeue=False)` and valid messages with `basic_ack()`.
 
 ### Part E: Final Report & Architecture (15 Marks)
 - [ ] Comprehensive report document (`23BCS091_Golla_Teja_Pipelines.pdf`, <= 8 pages excluding screenshot appendix).
