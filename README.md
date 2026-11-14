@@ -30,42 +30,42 @@ The project is structured into five core components:
 
 ```mermaid
 flowchart TD
-    subgraph Governance ["Code Governance & CI/CD (Part A)"]
-        DEV["Local Working Tree"] -->|"git commit"| REPO["Local Repository (.git)"]
-        REPO -->|"git push"| GITHUB["GitHub Remote (main)"]
-        GITHUB -->|"on: push"| GHA["GitHub Actions (Python 3.12)"]
-        GHA -->|"pytest -v"| TESTS["17 Unit Tests (Quality Gates)"]
+    subgraph Governance ["Code Governance and CI/CD (Part A)"]
+        DEV["Local Working Tree"] -->|git commit| REPO["Local Repository"]
+        REPO -->|git push| GITHUB["GitHub Remote main"]
+        GITHUB -->|on push| GHA["GitHub Actions Python 3.12"]
+        GHA -->|pytest -v| TESTS["17 Unit Tests Passed"]
     end
 
     subgraph Lakehouse ["FreshCart Snowflake ELT (Part B)"]
-        RAW_API["API Mock Data (Web, Mobile, CRM, FX)"] -->|"Extract"| LANDING["Landing JSON.GZ Files"]
-        LANDING -->|"PUT + COPY INTO"| BRONZE["bronze.orders_raw (VARIANT)"]
-        BRONZE -->|"Cleanse & Validate"| SILVER_CHECK["silver.orders_checked"]
-        SILVER_CHECK -->|"ARRAY_SIZE(reasons) > 0"| QUARANTINE["quarantine.orders (Anti-Join Guard)"]
-        SILVER_CHECK -->|"ARRAY_SIZE(reasons) == 0"| SILVER_CLEAN["silver.orders_clean"]
-        SILVER_CLEAN -->|"QUALIFY ROW_NUMBER()"| SILVER_DEDUP["silver.orders_dedup"]
-        SILVER_DEDUP -->|"Point-in-Time Join"| GOLD["gold.fct_orders (Idempotent MERGE on row_hash)"]
-        CRM["bronze.customers_raw"] -->|"SCD Type 2"| DIM_CUST["dim.customers_scd2"]
+        RAW_API["API Payload Data"] -->|Extract| LANDING["Landing JSON GZ Files"]
+        LANDING -->|PUT and COPY INTO| BRONZE["bronze.orders_raw"]
+        BRONZE -->|Cleanse and Validate| SILVER_CHECK["silver.orders_checked"]
+        SILVER_CHECK -->|Validation Failed| QUARANTINE["quarantine.orders"]
+        SILVER_CHECK -->|Validation Passed| SILVER_CLEAN["silver.orders_clean"]
+        SILVER_CLEAN -->|Deduplicate by Seq| SILVER_DEDUP["silver.orders_dedup"]
+        SILVER_DEDUP -->|Point-in-Time Join| GOLD["gold.fct_orders"]
+        CRM["bronze.customers_raw"] -->|SCD Type 2| DIM_CUST["dim.customers_scd2"]
         DIM_CUST -.-> GOLD
     end
 
     subgraph ML_Orchestration ["Mage ML Pipeline (Part C)"]
-        LOAD["load_iris (data_loader)"] -->|"@test test_output"| VAL["validate_data (custom transformer)"]
-        VAL -->|"@test test_no_nulls"| PREP["prepare_data (stratified 80/20)"]
-        PREP -->|"@test test_split"| TRAIN["train_model (DecisionTreeClassifier)"]
-        TRAIN -->|"Gate: test_accuracy >= 90%"| EXPORT["save_results (data_exporter)"]
-        TRAIN -->|"Branch"| EVAL["evaluate_model (confusion matrix & metrics)"]
+        LOAD["load_iris"] -->|Test Passed| VAL["validate_data"]
+        VAL -->|No Nulls| PREP["prepare_data 80-20"]
+        PREP -->|Test Split| TRAIN["train_model DecisionTree"]
+        TRAIN -->|Accuracy Gate Met| EXPORT["save_results to CSV"]
+        TRAIN -->|Branch| EVAL["evaluate_model Metrics"]
     end
 
     subgraph Streaming ["Food-Order Event Streaming (Part D)"]
-        DISPATCHER["stream/dispatcher.py"] -->|"Publish (city.zone.type)"| EXCH["Topic Exchange: rapido-dispatch"]
-        EXCH -->|"bangalore.koramangala.*"| RAVI["Queue: Ravi"]
-        EXCH -->|"bangalore.indiranagar.*"| PRIYA["Queue: Priya"]
-        EXCH -->|"bangalore.*.ride"| ARJUN["Queue: Arjun"]
-        EXCH -->|"bangalore.*.food"| MEENA["Queue: Meena"]
-        EXCH -->|"chennai.tnagar.food"| KARTHIK["Queue: Karthik"]
-        EXCH -->|"bangalore.#"| CONTROL["Queue: Control"]
-        RAVI -->|"zone missing? NACK : ACK"| DRIVER_CLIENT["driver.py consumer"]
+        DISPATCHER["stream/dispatcher.py"] -->|Publish Events| EXCH["Topic Exchange rapido-dispatch"]
+        EXCH -->|Koramangala Wildcard| RAVI["Queue Ravi"]
+        EXCH -->|Indiranagar Wildcard| PRIYA["Queue Priya"]
+        EXCH -->|Bangalore Ride Wildcard| ARJUN["Queue Arjun"]
+        EXCH -->|Bangalore Food Wildcard| MEENA["Queue Meena"]
+        EXCH -->|Chennai Tnagar Food| KARTHIK["Queue Karthik"]
+        EXCH -->|Bangalore All Multi-word| CONTROL["Queue Control"]
+        RAVI -->|ACK Valid or NACK Fault| DRIVER_CLIENT["driver.py Consumer"]
     end
 ```
 
