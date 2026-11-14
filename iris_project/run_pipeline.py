@@ -4,6 +4,9 @@ import json
 import os
 import sys
 
+# Ensure repository root is on sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from iris_project.data_loaders import load_iris
 from iris_project.data_exporters import save_results
 from iris_project.transformers import evaluate_model, prepare_data, train_model, validate_data
