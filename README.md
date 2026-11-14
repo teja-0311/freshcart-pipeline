@@ -31,41 +31,41 @@ The project is structured into five core components:
 ```mermaid
 flowchart TD
     subgraph Governance ["Code Governance & CI/CD (Part A)"]
-        DEV["Local Working Tree"] -->|git commit| REPO["Local Repository (.git)"]
-        REPO -->|git push| GITHUB["GitHub Remote (main)"]
-        GITHUB -->|on: push| GHA["GitHub Actions (Python 3.12)"]
-        GHA -->|pytest -v| TESTS["16 Unit Tests (Quality Gates)"]
+        DEV["Local Working Tree"] -->|"git commit"| REPO["Local Repository (.git)"]
+        REPO -->|"git push"| GITHUB["GitHub Remote (main)"]
+        GITHUB -->|"on: push"| GHA["GitHub Actions (Python 3.12)"]
+        GHA -->|"pytest -v"| TESTS["17 Unit Tests (Quality Gates)"]
     end
 
     subgraph Lakehouse ["FreshCart Snowflake ELT (Part B)"]
-        RAW_API["API Mock Data (Web, Mobile, CRM, FX)"] -->|Extract| LANDING["Landing JSON.GZ Files"]
-        LANDING -->|PUT + COPY INTO| BRONZE["bronze.orders_raw (VARIANT)"]
-        BRONZE -->|Cleanse & Validate| SILVER_CHECK["silver.orders_checked"]
-        SILVER_CHECK -->|ARRAY_SIZE(reasons) > 0| QUARANTINE["quarantine.orders (Anti-Join Guard)"]
-        SILVER_CHECK -->|ARRAY_SIZE(reasons) == 0| SILVER_CLEAN["silver.orders_clean"]
-        SILVER_CLEAN -->|QUALIFY ROW_NUMBER()| SILVER_DEDUP["silver.orders_dedup"]
-        SILVER_DEDUP -->|Point-in-Time Join| GOLD["gold.fct_orders (Idempotent MERGE on row_hash)"]
-        CRM["bronze.customers_raw"] -->|SCD Type 2| DIM_CUST["dim.customers_scd2"]
+        RAW_API["API Mock Data (Web, Mobile, CRM, FX)"] -->|"Extract"| LANDING["Landing JSON.GZ Files"]
+        LANDING -->|"PUT + COPY INTO"| BRONZE["bronze.orders_raw (VARIANT)"]
+        BRONZE -->|"Cleanse & Validate"| SILVER_CHECK["silver.orders_checked"]
+        SILVER_CHECK -->|"ARRAY_SIZE(reasons) > 0"| QUARANTINE["quarantine.orders (Anti-Join Guard)"]
+        SILVER_CHECK -->|"ARRAY_SIZE(reasons) == 0"| SILVER_CLEAN["silver.orders_clean"]
+        SILVER_CLEAN -->|"QUALIFY ROW_NUMBER()"| SILVER_DEDUP["silver.orders_dedup"]
+        SILVER_DEDUP -->|"Point-in-Time Join"| GOLD["gold.fct_orders (Idempotent MERGE on row_hash)"]
+        CRM["bronze.customers_raw"] -->|"SCD Type 2"| DIM_CUST["dim.customers_scd2"]
         DIM_CUST -.-> GOLD
     end
 
     subgraph ML_Orchestration ["Mage ML Pipeline (Part C)"]
-        LOAD["load_iris (data_loader)"] -->|@test test_output| VAL["validate_data (custom transformer)"]
-        VAL -->|@test test_no_nulls| PREP["prepare_data (stratified 80/20)"]
-        PREP -->|@test test_split| TRAIN["train_model (DecisionTreeClassifier)"]
-        TRAIN -->|Gate: test_accuracy >= 90%| EXPORT["save_results (data_exporter)"]
-        TRAIN -->|Branch| EVAL["evaluate_model (confusion matrix & metrics)"]
+        LOAD["load_iris (data_loader)"] -->|"@test test_output"| VAL["validate_data (custom transformer)"]
+        VAL -->|"@test test_no_nulls"| PREP["prepare_data (stratified 80/20)"]
+        PREP -->|"@test test_split"| TRAIN["train_model (DecisionTreeClassifier)"]
+        TRAIN -->|"Gate: test_accuracy >= 90%"| EXPORT["save_results (data_exporter)"]
+        TRAIN -->|"Branch"| EVAL["evaluate_model (confusion matrix & metrics)"]
     end
 
     subgraph Streaming ["Food-Order Event Streaming (Part D)"]
-        DISPATCHER["stream/dispatcher.py"] -->|Publish (city.zone.type)| EXCH["Topic Exchange: rapido-dispatch"]
-        EXCH -->|bangalore.koramangala.*| RAVI["Queue: Ravi"]
-        EXCH -->|bangalore.indiranagar.*| PRIYA["Queue: Priya"]
-        EXCH -->|bangalore.*.ride| ARJUN["Queue: Arjun"]
-        EXCH -->|bangalore.*.food| MEENA["Queue: Meena"]
-        EXCH -->|chennai.tnagar.food| KARTHIK["Queue: Karthik"]
-        EXCH -->|bangalore.#| CONTROL["Queue: Control"]
-        RAVI -->|zone missing? NACK : ACK| DRIVER_CLIENT["driver.py consumer"]
+        DISPATCHER["stream/dispatcher.py"] -->|"Publish (city.zone.type)"| EXCH["Topic Exchange: rapido-dispatch"]
+        EXCH -->|"bangalore.koramangala.*"| RAVI["Queue: Ravi"]
+        EXCH -->|"bangalore.indiranagar.*"| PRIYA["Queue: Priya"]
+        EXCH -->|"bangalore.*.ride"| ARJUN["Queue: Arjun"]
+        EXCH -->|"bangalore.*.food"| MEENA["Queue: Meena"]
+        EXCH -->|"chennai.tnagar.food"| KARTHIK["Queue: Karthik"]
+        EXCH -->|"bangalore.#"| CONTROL["Queue: Control"]
+        RAVI -->|"zone missing? NACK : ACK"| DRIVER_CLIENT["driver.py consumer"]
     end
 ```
 
