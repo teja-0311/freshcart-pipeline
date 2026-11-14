@@ -15,8 +15,8 @@
 | **Phase 0** | Repository Audit & Materials Check | - | **Completed** | Full repository audit performed, source notebooks and assignment spec extracted. |
 | **Phase 1 (Part A)** | Git and CI/CD | 15 | **Completed** | Directory structure, .gitignore, 7-commit history with intentional CI failure and fix verified. 4/4 pytest tests passing. |
 | **Phase 2 (Part B)** | FreshCart ELT using Snowflake | 30 | **Completed** | Full `elt/freshcart_elt.ipynb` notebook implemented with baseline, currency rule, SCD2 Arjun event, custom DQ check, and tracing. `.env.example` created. |
-| **Phase 3 (Part C)** | Iris ML pipeline using Mage | 20 | **In Progress** | Implementing Mage pipeline blocks and runtime parameter experiments in `iris_project/`. |
-| **Phase 4 (Part D)** | Food-order streaming with RabbitMQ | 20 | **Not Started** | Pending Part C completion. |
+| **Phase 3 (Part C)** | Iris ML pipeline using Mage | 20 | **Completed** | Full Mage block DAG implemented, `metadata.yaml` configured, test-gate experiment executed (`max_depth = 1..5`), evaluation branch added, custom validation block created, and 9/9 pytest tests passing. |
+| **Phase 4 (Part D)** | Food-order streaming with RabbitMQ | 20 | **In Progress** | Implementing `stream/dispatcher.py` and `stream/driver.py`. |
 | **Phase 5 (Part E)** | Final Report, Architecture & Viva | 15 | **Not Started** | Target: `23BCS091_Golla_Teja_Pipelines.pdf`. |
 | **Bonus** | RabbitMQ to Snowflake Lakehouse | +10 | **Deferred** | Scheduled after Parts A-E. |
 
@@ -41,10 +41,10 @@
 - [x] **B6. Standalone Execution & Verification:** Provided `.env.example` and safe execution instructions.
 
 ### Part C: Mage Iris ML Pipeline (20 Marks)
-- [ ] **C1. Pipeline Blocks:** `load_iris`, `prepare_data`, `train_model`, `save_results` with `@test` decorators and `metadata.yaml`.
-- [ ] **C2. Parameter Experiments:** Run `max_depth = 1..5`, record accuracy and CSV creation. Explain gating mechanism.
-- [ ] **C3. Evaluation Branch:** Add `evaluate_model` with confusion matrix and metrics table.
-- [ ] **C4. Custom Block:** Add custom transformer/exporter with `@test`, update CI to ensure pytest compatibility.
+- [x] **C1. Pipeline Blocks:** `load_iris`, `prepare_data`, `train_model`, `save_results` with `@test` decorators and `metadata.yaml`.
+- [x] **C2. Parameter Experiments:** Ran `max_depth = 1..5`, verified accuracy and CSV gating mechanism.
+- [x] **C3. Evaluation Branch:** Added `evaluate_model` with confusion matrix and metrics table.
+- [x] **C4. Custom Block:** Added `validate_data` with `@test` decorators, added test suite in `tests/test_iris_pipeline.py`.
 
 ### Part D: Food-Order Event Streaming with RabbitMQ (20 Marks)
 - [ ] **D1. Paper Routing Table:** Complete matching analysis for binding patterns vs routing keys.
